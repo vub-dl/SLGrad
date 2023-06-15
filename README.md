@@ -8,3 +8,5 @@
 
 - Add citation to libmtl + dataset repos
 
+- Change name of requirement file and all import statements;
+
