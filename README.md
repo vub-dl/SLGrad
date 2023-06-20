@@ -19,8 +19,60 @@ The results of the experiments will be automatically logged to Weights and Biase
 
 To run benchmark experiments with different dynamic weighting algorithms on different (semi) synthetic and real-world datasets, run the **run_experiments.py** file. 
 
-Before running the code, specify the configuration in the dictionary provided in the  **run_experiments.py**
-Explain the dictionary of run_experiments.py
+Before running the code, specify the configuration in the dictionary provided in the  **run_experiments.py** file. The meaning of each parameter is discussed below. 
+
+### Parameters
+
+- **Task_Weighting_strategy**: specifies the dynamic weighting method.
+  
+  - Supported values: AlgType.SLgrad.value, AlgType.Unif.value, AlgType.Olaux.value, AlgType.CAgrad.value, AlgType.Gnorm.value, AlgType.PCGrad.value
+
+- **Dataset**: specifies the dataset the experiments are conducted on.
+
+  - Supported values: DataName.Multi_MNIST.value, DataName.CIFAR10.value, DataName.Toy_reg.value, DataName.NYUv2.value
+    
+- **Number_of_Tasks**: specifies the number of tasks to train. Note that the "main task" automatically corresponds to task 0.
+
+  - Supported values: [1, inf[ for DataName.Toy_reg.value     and  dataset specific for CIFAR10, Multi_MNIST and NYUv2.
+ 
+- **input_dimension**: specifies the input dimension of the tensors.
+  
+  - Supported values: [1, inf[ in principle. See examples for specific experiments.
+
+-  **output_dimension_task1** and **output_dimension_task2**: specify the output dimensions of task 1 and 2 respectively (for toy experiments only).
+
+    - Supported values: [1, inf[ in principle. See examples for specific experiments.
+
+-  **Batch_Size** and **val_Batch_Size**: specify the batch size of the training and validation set respectively. If task weighting strategy not equal to SLGrad, the     batch_size should correspond to the size of the validation set
+    - Supported values: [1, inf[ in principle: to be optimized.
+ 
+-  **Number_of_Shared_Layers** and **Dim_of_Shared_Layers**: specify the number and dimension of backbone layers shared by all tasks.
+
+    - Supported values: [1, inf[ in principle: to be optimized. See examples and paper for specific experiments.
+
+-  **Number_of_Task_Layers** and **Dim_Task_Layers**: specify the number and dimension of task specific backbone layers.
+
+   -  Supported values: [1, inf[ in principle: to be optimized. See examples and paper for specific experiments.
+
+- **Optimizer**: specifies the torch optimizer used to train the models.
+
+   - Supported values: 'sgd' or 'adam' which will initialize torch.optim.SGD and torch.optim.Adam respectively
+
+- **beta_1_backbone** and **beta_2_backbone**: specifies the beta 1 and beta 2 values for torch.optim.Adam if necessary.
+  
+    - Supported values: ]0, 0.99], to be optimized.
+
+- **Learning_Weight**: specifies the learning rate used by the optimizer
+
+    -
+  
+      
+ 
+
+
+
+
+  
 
 
 
