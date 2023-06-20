@@ -64,7 +64,27 @@ Before running the code, specify the configuration in the dictionary provided in
 
 - **Learning_Weight**: specifies the learning rate used by the optimizer
 
-    -
+    - Supported values: any appropriate learning rate, to be optimized. See examples for specific experiments
+
+- **Onlymain**: specifies whether only the main task is noisy or all tasks. Only to be specified when "noise" > 0
+
+    - Supported values: True, False
+
+- **Noise**: specifies percentage of noise (only compatible with Toy and CIFAR10 experiments)
+
+    - Supported values: [0,1]
+ 
+- **random_seed**: specifies random state for reproducibility
+
+    - Supported values: any positive integer
+
+- **Regression**: specifies if generated toy data corresponds to regression tasks or classification tasks (to be specified only if Dataset is Toy_reg)
+
+    - Supported values: True, False
+      
+- **UNI**: specifies if labels are flipped in uniform way or to background class (to be specified for CIFAR10 label flip experiments)
+
+   - Supported values: True, False
   
       
  
