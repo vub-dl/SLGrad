@@ -91,7 +91,8 @@ For example configurations, please check the **Examples** folders.
 
 ## Overview
 
-Updated soon.
+<img width="390" alt="Diagram" src="https://github.com/vub-dl/SLGrad/assets/108074099/695b99f3-19b1-4e70-9054-b5955634b8ba">
+
 
 ## Citation
 
