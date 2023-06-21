@@ -1,5 +1,5 @@
 from requierments import *
-#taken from libmtl library who took it from deepheadlab
+#copied from @LibMTL
 """## BackBone: ASPP """
 
 class DeepLabHead(nn.Sequential):
