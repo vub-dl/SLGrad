@@ -1,7 +1,7 @@
 from enum import Enum, unique
 from Requirements import *
-@unique
 
+@unique
 class AlgType(Enum): #supported algorithms
     Unif = 'unif'
     SLGrad = 'slgrad' #new sample level weighting algorithm
@@ -505,8 +505,6 @@ class SLGrad(Dynamic_Weighting):
 class Gcosim(Dynamic_Weighting):
     def __init__(self, mdl):
         Dynamic_Weighting.__init__(self,mdl)
-
-
 
     def getNormalizedGrads(self, grads, weight, normType=None):
         assert (normType == NormType.Nun.value or
