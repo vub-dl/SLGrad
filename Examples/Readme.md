@@ -2,13 +2,13 @@
 
 This folder contains example parameter configurations for running experiments on the following datasets:
 
-- Toy Regression dataset with and without noise: 2 task regression dataset as described in the paper. 
+- Toy Regression dataset with and without noise: two task regression dataset as described in our paper. 
 
 - NYUv2 [[1]](#1)
 
 - CIFAR10 [[2]](#2): multi-task setup (10 binary tasks) with and without 60 percent of uniformly flipped labels for the main task. 
 
-- Multi-MNIST [[3]](#3)
+- Multi-MNIST [[3]](#3): two-task setup up consisting of the recognition of the left and right digit, as described in our paper
 
 # References
 
