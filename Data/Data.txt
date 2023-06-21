@@ -1,1 +1,4 @@
 This folder contains all data-related code.
+
+
+multi mnist data code https://github.com/pytorch/vision/blob/main/torchvision/datasets/mnist.py
