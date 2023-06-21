@@ -90,16 +90,23 @@ Before running the code, specify the configuration in the dictionary provided in
  
 
 
-
-
-  
-
-
-
 ## Overview
 
 - Add class diagram
 
-## Used Repositories:
-add cit to libmtl and pcgrad - Add citation to libmtl + dataset repos
+## References
+Although most of the code has been implemented by us, we do rely on open-source repositories like [[1]] and [[2]].
+We provide all references in the code-specific folders and thank all contributors for sharing their code. 
+
+<a id="1">[1]</a> 
+Baijiong Lin and Yu Zhang (2022). 
+LibMTL: A Python Library for Multi-Task Learning. 
+arXiv preprint arXiv:2203.14338_.
+Github: https://github.com/median-research-group/LibMTL/tree/0aaada50cd609b39c65553d4c2760c18b02d8e74/examples/nyu 
+
+<a id="2">[2]</a> 
+Ozan Sener and Vladlen Koltun (2018).
+Multi-Task Learning as Multi-Objective Optimization. 
+*Advances in neural information processing systems*, **31**. 
+Github: https://github.com/isl-org/MultiObjectiveOptimization.git
 
