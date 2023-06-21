@@ -1,5 +1,3 @@
-import torch
-
 from Requirements import *
 from MTL_MODEL_OPT import *
 from Dynamic_weighting import *
@@ -12,8 +10,7 @@ class Fit_MTL_Optimization():
 
         self.config = configuration
         self.Learning_Alg=Global_MTL(configProj=self.config)
-        # add dataset
-        # add multi task model
+       
         # Detect Dynamic Weighting Algorithm
         if self.config["Task_Weighting_strategy"] == AlgType.Random.value:
             self.dynamic_alg_Type = Random(self.Learning_Alg)
