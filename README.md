@@ -21,7 +21,7 @@ To run benchmark experiments with different dynamic weighting algorithms on diff
 
 Before running the code, specify the configuration in the dictionary provided in the  **run_experiments.py** file. The meaning of each parameter is discussed below. 
 
-For example configurations, please check the **Examples** folders. 
+For example configurations, please check the **Examples** folder. 
 
 ### Parameters
 
