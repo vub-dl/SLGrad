@@ -1,7 +1,7 @@
 # SLGRAD
 This repository provides code for the experiments in **Sample-Level Weighting for Multi-Task Learning with Auxiliary Tasks** (https://arxiv.org/pdf/2306.04519).
 
-<img width="412" alt="Capture" src="https://github.com/vub-dl/SLGrad/assets/108074099/a501ae04-a48a-4877-be76-067446dfc1a3">
+<img width="412" alt="Capture" src="https://github.com/vub-dl/SLGrad/assets/108074099/2069dfcc-d7cc-4099-aa37-a8a48ef7d8c1">
 
 
 ## Setup
