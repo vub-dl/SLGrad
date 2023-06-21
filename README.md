@@ -108,6 +108,9 @@ If you use this codebase or any part of it for a publication, please cite:
       primaryClass={cs.LG}
 }
 ```
+## Contact
+
+For any questions about the code or paper, feel free to contact emilie.gregoire@vub.be. 
 
 ## References
 Although most of the code has been implemented by us, we do rely on open-source repositories like [[1]](#1) and [[2]](#2).
