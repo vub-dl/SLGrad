@@ -536,19 +536,3 @@ def mergeImgs(images, size):
 
     return imgs
 
-train_dst=Multi_MNIST(root="./data", train=True, download=True, transform=global_transformer(), multi=True)
-rest, train_data=torch.utils.data.random_split(train_dst, [40000, 20000])
-train_dst, val_dst=torch.utils.data.random_split(train_data, [15000, 5000])
-test_dst = Multi_MNIST(root=".data", train=False, download=True, transform=global_transformer(), multi=True)
-
-train_loader = torch.utils.data.DataLoader(train_dst, batch_size=32, shuffle=True)
-val_loader = torch.utils.data.DataLoader(val_dst, batch_size=5000, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test_dst, batch_size=1000, shuffle=True)
-
-for batch in train_loader:
-    im, lab1, lab2=batch
-
-print(im.size())
-print(lab1.size())
-print(lab2.size())
-print(torch.stack((lab1, lab2)).size())
