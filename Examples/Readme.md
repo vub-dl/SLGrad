@@ -6,7 +6,7 @@ This folder contains example parameter configurations for running experiments on
 
 - NYUv2 [[1]](#1)
 
-- CIFAR10 with and without flipped labels [[2]](#2)
+- CIFAR10 [[2]](#2): multi-task setup (10 binary tasks) with and without 60 percent of uniformly flipped labels for the main task. 
 
 - Multi-MNIST [[3]](#3)
 
