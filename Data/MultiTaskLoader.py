@@ -1,4 +1,5 @@
-
+#Used for toy regression dataset
+#Copied from allennlp/data/data_loaders/multitask_data_loader.py
 
 from itertools import islice, chain, repeat
 import torch.utils.data
