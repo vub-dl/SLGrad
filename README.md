@@ -86,13 +86,10 @@ Before running the code, specify the configuration in the dictionary provided in
 
    - Supported values: True, False
   
-      
- 
-
 
 ## Overview
 
-- Add class diagram
+Updated soon.
 
 ## References
 Although most of the code has been implemented by us, we do rely on open-source repositories like [[1]] and [[2]].
