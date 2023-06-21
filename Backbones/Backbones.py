@@ -1,6 +1,4 @@
 from typing import Dict
-
-import torch
 from torch import Tensor
 
 from Requirements import *
@@ -10,7 +8,6 @@ from ASPP_decoders import *
 
 class Backbone(nn.Module):
     def __init__(self, input_dim, nSharedL, dimSharedL, nTask, nTaskL, dimTaskL):
-
         super(Backbone, self).__init__()
         self.input_dim = input_dim  # dimension of input tensor (number of features)
         self.nSharedL = nSharedL  # number of shared layers
@@ -94,8 +91,6 @@ class MTNet(Backbone):
 num_out_channels = {'segmentation': 13, 'depth': 1, 'normal': 3}
 
 class MTAN(Backbone):
-
-
     def __init__(self, nTasks=3, encoder=encoder_class(), decoders=nn.ModuleDict({task: DeepLabHead(2048, num_out_channels[task]) for task in ['segmentation', 'depth', 'normal']})): #default will be as in LIBMTL: encoder dilated resnet 50, decoders ASPP . 3 tasks, ordened as segmentation=0, depth=1, normal=3
         Backbone.__init__(self, 284 * 384, 50, 100, nTasks, 10, 100)
         self.ntasks = nTasks
@@ -104,7 +99,6 @@ class MTAN(Backbone):
 
 
     def forward(self, batch, task=-1):
-
         ypred = dict()
         # input through shared dilated resnet-50 encoder
 
@@ -319,50 +313,7 @@ class MultiLeNet(Backbone):
 
 
 
-'''
-model=MultiLeNet()
-model.train()
-from Datasets import *
 
-train_dst=Multi_MNIST(root="./data", train=True, download=True, transform=global_transformer(), multi=True)
-rest, train_data=torch.utils.data.random_split(train_dst, [40000, 20000])
-train_dst, val_dst=torch.utils.data.random_split(train_data, [15000, 5000])
-test_dst = Multi_MNIST(root=".data", train=False, download=True, transform=global_transformer(), multi=True)
-
-train_loader = torch.utils.data.DataLoader(train_dst, batch_size=32, shuffle=True)
-val_loader = torch.utils.data.DataLoader(val_dst, batch_size=5000, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test_dst, batch_size=1000, shuffle=True)
-
-for batch in train_loader:
-    im, lab1, lab2=batch
-
-print(model(im))
-'''
-
-
-
-
-
-
-'''
-model=LeNet(nsharedL=2, ntaskL=2)
-model.train()
-from Datasets import CIFAR10
-
-data=CIFAR10(flipped_labels_UNI=True, flipped_labels_BF=False, noise_percentage=0.8)
-
-train, val, test=data.MTL_Subset(100, 500)
-
-trainloader=torch.utils.data.DataLoader(
-                dataset=train,
-                batch_size=30,
-                shuffle=False,
-                pin_memory=True)
-
-for el in trainloader:
-    im, lab=el
-print(model(im))
-'''
 
 
 
