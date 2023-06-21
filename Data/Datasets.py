@@ -1,8 +1,5 @@
 import copy
 from enum import Enum, unique
-
-import torch
-
 from Requirements import *
 from RandomScaleCrop import *
 
@@ -17,7 +14,6 @@ class DataName(Enum): #supported datasets
 
 class Dataset():
     def __init__(self,  number_of_features: object, NTask: object) -> object:
-
         self.NFeat=number_of_features
         self.NTask=NTask
 
@@ -90,8 +86,6 @@ class ToyRegDataset(Dataset):
 class NYU(Dataset):
 
     def __init__(self, root, NTask: object = 3, number_of_features=284*384, mode='train', augmentation=False, random_state: object = 99):  # init the dataset parameters
-
-
         self.mode=mode
         self.root=root
         self.augmentation=augmentation
@@ -137,6 +131,7 @@ class NYU(Dataset):
                        357, 540, 547, 699, 467, 360, 386, 6, 312, 765, 192, 734, 794, 747, 709, 191, 336, 759, 288, 125,
                        159, 741, 436, 310, 608, 88, 354, 71, 272, 729, 614, 308, 293, 742, 652, 117, 470, 145, 128, 693,
                        667, 331, 64]
+        
         # read the data file
         if self.mode == 'train':
             self.index_list = train_index
@@ -277,10 +272,6 @@ class CIFAR10(Dataset):
 
 
 # Adapted from: https://github.com/pytorch/vision/blob/master/torchvision/datasets/mnist.py
-
-
-
-
 class Multi_MNIST(Dataset):
     """`MNIST <http://yann.lecun.com/exdb/mnist/>`_ Dataset.
 
@@ -511,10 +502,6 @@ def read_image_file(path):
         return torch.from_numpy(parsed).view(length, num_rows, num_cols), torch.from_numpy(multi_data).view(length,
                                                                                                             num_rows,
                                                                                                             num_cols), extension
-
-
-
-
 
 
 def global_transformer():
