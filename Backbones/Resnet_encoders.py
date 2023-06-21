@@ -1,6 +1,6 @@
 from requierments import *
 
-#taken from LIBMTL
+#Copied from @LibMTL
 
 
 """##Backbone: Resnets (pretrained)"""
