@@ -91,6 +91,19 @@ Before running the code, specify the configuration in the dictionary provided in
 
 Updated soon.
 
+## Citation
+
+If you use this codebase or any part of it for a publication, please cite:
+
+@misc{grégoire2023samplelevel,
+      title={Sample-Level Weighting for Multi-Task Learning with Auxiliary Tasks}, 
+      author={Emilie Grégoire and Hafeez Chaudhary and Sam Verboven},
+      year={2023},
+      eprint={2306.04519},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
 ## References
 Although most of the code has been implemented by us, we do rely on open-source repositories like [[1]] and [[2]].
 We provide all references in the code-specific folders and thank all contributors for sharing their code. 
