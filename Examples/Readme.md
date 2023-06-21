@@ -6,7 +6,7 @@ This folder contains example parameter configurations for running experiments on
 
 - NYUv2 [[1]](#1): multi-task setup (3 tasks) as discussed in [[2]](#2)
 
-- CIFAR10 [[3]](#3): multi-task setup (10 binary tasks) with and without 60 percent of uniformly flipped labels for the main task. 
+- CIFAR10 [[3]](#3): multi-task setup (10 binary tasks) with and without 60 percent of uniformly flipped labels for the main task, as described in our paper. 
 
 - Multi-MNIST [[4]](#4): two-task setup up consisting of the recognition of the left and right digit, as described in our paper
 
