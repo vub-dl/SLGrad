@@ -17,6 +17,15 @@ This folder contains all code related to the dynamic weighting algorithms used t
 
 - **GradNorm:** Gradient normalization algorithm that automatically tunes gradient magnitudes to dynamically balance training in deep multi-task models [[7]](#7).  For usage, specify AlgType.Gnorm.value as a value for the 'Task_Weighting_strategy' in the parameter dictionary.[Own_implementation]
 
+# Extension
+
+In order to add other dynamic weighting algorithms: 
+
+1. Add the name of the algorithm to **AlgType(Enum)**   (in Dynamic_Weighting.py)
+2. Create a subclass of the Dynamic_Weighting class with the same name. Make sure to use attributes of the Dynamic_Weighting class for the calculation of gradient norms, and cosine similarities, ... Make sure to distinguish between task-specific and shared layers in a way that is compatible with the backbones. Use the other algorithms as inspiration.
+3. Modify MTL_MODEL_OPT.py: add a step to initialize the task weights for the new algorithm and check if the task weights are distributed to the losses in a way compatible to the algorithm.
+4. Modify Experiment_fit.py: add a step to initialize the training loop of the new algorithm. Make sure the batches are fed to the algorithm in the correct way.
+
 
 
 # References
