@@ -1,6 +1,6 @@
 # Backbones: overview
 
-This folder contains the code related to the neural networks used as a backbone in the experiments performed on the different datasets. Currently, the following backbones:
+This folder contains the code related to the neural networks used as a backbone in the experiments performed on the different datasets. Currently, the folder provides code for conducting experiments with the following backbones:
 
 - **MTNET:** standard neural network with a flexible number of shared and task-specific layers for multiple regression tasks. Used for experiments on Toy data.  
 
@@ -10,6 +10,7 @@ This folder contains the code related to the neural networks used as a backbone 
 
 - **Multi-LeNet**: Slightly adapted LeNet architecture for experiments on the Multi-MNIST [[4]](#4) dataset. Code adapted from [[5]](#5). 
 
+When choosing a dataset in the parameters in run_experiments.py, the correct backbone is automatically selected. To change the default backbone used for each dataset, modify code in MTL_MODEL_OPT.py. 
 
 # References
 
