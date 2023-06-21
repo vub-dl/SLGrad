@@ -110,7 +110,7 @@ If you use this codebase or any part of it for a publication, please cite:
 ```
 
 ## References
-Although most of the code has been implemented by us, we do rely on open-source repositories like [[1]] and [[2]].
+Although most of the code has been implemented by us, we do rely on open-source repositories like [[1]](#1) and [[2]](#2).
 We provide all references in the code-specific folders and thank all contributors for sharing their code. 
 
 <a id="1">[1]</a> 
