@@ -7,6 +7,7 @@ from MTL_MODEL_OPT import *
 from Experiment_Fit import *
 from Dynamic_weighting import *
 from MultiTaskLoader import *
+
 ## **Hyperparameter Configuration**"
 
 hyperparameter_configuration= {
@@ -198,21 +199,11 @@ def run_experiment():
             Fit_MTL=Fit_MTL_Optimization(configProj)
             weights=Fit_MTL.Fit_NYU(train_loader, val_loader, test_features, test_labels)
 
-
-
-
-
-
-
-
         return weights
 
 
-
-
-
 wandb.login()
-sweep_id = wandb.sweep(hyperparameter_configuration, project="MTL_CODEBASE_CHECK")
+sweep_id = wandb.sweep(hyperparameter_configuration, project="Name_Project_here")
 wandb.agent(sweep_id, function=run_experiment)
 run_experiment()
 
