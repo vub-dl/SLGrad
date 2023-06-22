@@ -42,7 +42,7 @@ For example configurations, please check the **Examples** folder.
   
   - Supported values: [1, inf[ in principle. See examples for specific experiments.
 
--  **output_dimension_task1** and **output_dimension_task2**: specify the output dimensions of task 1 and 2 respectively (for toy experiments only).
+-  **output_dimension_task1** and **output_dimension_task2**: specify the output dimensions of tasks 1 and 2 respectively (for toy experiments only).
 
     - Supported values: [1, inf[ in principle. See examples for specific experiments.
 
