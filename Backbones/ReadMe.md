@@ -10,7 +10,7 @@ This folder contains the code related to the neural networks used as a backbone 
 
 - **Multi-LeNet**: Slightly adapted LeNet architecture for experiments on the Multi-MNIST [[4]](#4) dataset. Code adapted from [[5]](#5). 
 
-When choosing a dataset in the parameters in run_experiments.py, the correct backbone is automatically selected. To change the default backbone used for each dataset, modify code in MTL_MODEL_OPT.py. 
+When choosing a dataset in the parameters in run_experiments.py, the correct backbone is automatically selected. To change the default backbone used for each dataset, modify the code in MTL_MODEL_OPT.py. 
 
 # References
 
