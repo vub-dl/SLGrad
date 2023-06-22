@@ -15,6 +15,7 @@ pip install -r requirements.txt
 To run the experiments on your own device, make sure to unpack all files (folders as well). 
 
 The results of the experiments will be automatically logged to Weights and Biases https://wandb.ai/site. Make sure to create an account before starting the experiments.   
+
 ## Usage
 
 To run benchmark experiments with different dynamic weighting algorithms on different (semi) synthetic and real-world datasets, run the **run_experiments.py** file. 
@@ -37,7 +38,7 @@ For example configurations, please check the **Examples** folder.
 
   - Supported values: [1, inf[ for DataName.Toy_reg.value     and  dataset specific for CIFAR10, Multi_MNIST and NYUv2.
  
-- **input_dimension**: specifies the input dimension of the tensors.
+- **input_dimension**: specifies the input dimension of the input tensors (corresponding to the number of features).
   
   - Supported values: [1, inf[ in principle. See examples for specific experiments.
 
