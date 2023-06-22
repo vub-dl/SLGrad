@@ -15,6 +15,21 @@ Currently includes the following datasets/generators:
 All datasets are transformed into Pytorch "Dataset" objects to enable compatibility with Pytorch's DataLoaders. For more information about Pytorch Datasets and DataLoaders, please check https://pytorch.org/tutorials/beginner/basics/data_tutorial.html. 
 
 
+# Extension
+
+In order to add a dataset to the repository the following adaptations have to be made:
+
+1. Creation of an additional Dataset subclass = make the data compatible with Pytorch DataLoader object
+2. Addition of an appropriate name of the dataset to the DataName class
+3. Creation of an additional Backbone subclass appropriate to conduct experiments on the new dataset
+4. Addition of new losses/metrics to evaluate experiments on the new dataset
+5. MTL_Model_OPT: connect the new dataset to the correct backbone
+6. Experiment_Fit: eventually adapt the "FIT" function for compatibility with new data
+7. run_experiments: add the initialization of an experiment with the new dataset
+
+
+
+
 # References 
 
 <a id="1">[1]</a> 
