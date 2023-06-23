@@ -16,7 +16,7 @@ The multi-task optimizer is the central object of the repository: it connects th
 The Global_MTL class consists of the following attributes:
 
 - **__init__**: initialize the parameters of the multi-task optimizer based on the "configuration dictionary" passed by run_experiments. The hyperparameters and backbone (depending on the dataset), weighting method, and corresponding initial task weights are initialized here. Next, the losses and metrics are initialized: every experiment/type of task needs another loss function.
-- 
+  
 - **setInvalid** is a function used to check if infinite values are occurring in one of the predicted tensors. If infinities are detected, they are replaced by finite values. This function is called by the **predict** function. 
   
 - **predict**: a function that calls the forward method of the backbone for each task if task=-1 or only one task if task /= -1. 
