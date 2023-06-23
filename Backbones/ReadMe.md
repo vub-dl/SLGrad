@@ -10,7 +10,21 @@ This folder contains the code related to the neural networks used as a backbone 
 
 - **Multi-LeNet**: Slightly adapted LeNet architecture for experiments on the Multi-MNIST [[4]](#4) dataset. Code adapted from [[5]](#5). 
 
+
 When choosing a dataset in the parameters in run_experiments.py, the correct backbone is automatically selected. To change the default backbone used for each dataset, modify the code in MTL_MODEL_OPT.py. 
+
+# Extension
+
+To add a new backbone to this repository, the following steps should be taken:
+
+1. Add a new subclass to the "Backbone" superclass. Add new properties and attributes if necessary.
+2. Make sure the layers are collected in the torch.nn.modules with names including "shared" and "task" for the shared and task-specific layers. This is needed for compatibility with the dynamic weighting algortihms.
+3. MTL_OPT.py: connect the correct dataset to the new backbone in the **__init__** part
+4. MTL_OPT.py: make sure the correct losses are selected for training this backbone
+5. MTL_OPT.py > GetLosses: check if the predictions are passed to the loss functions in a correct way
+6. run_experiments.py: enable the selection of this new backbone through the parameter configuration dictionary
+
+If the addition of this backbone is combined with a new dataset, check the extension steps in the "Dataset" folder. 
 
 # References
 
