@@ -1,4 +1,6 @@
 from typing import Dict
+
+import torch
 from torch import Tensor
 
 from Requirements import *
@@ -8,6 +10,7 @@ from ASPP_decoders import *
 
 class Backbone(nn.Module):
     def __init__(self, input_dim, nSharedL, dimSharedL, nTask, nTaskL, dimTaskL):
+
         super(Backbone, self).__init__()
         self.input_dim = input_dim  # dimension of input tensor (number of features)
         self.nSharedL = nSharedL  # number of shared layers
@@ -42,11 +45,7 @@ class MTNet(Backbone):
                 self.output_dim = self.output_dim_2
             for j in range(0, self.nTaskL):
                 if j == self.nTaskL - 1 or self.nTaskL == 0:  # the last layer should output the output dim
-                    if self.nTaskL == 1:
-                        taskLs.append(torch.nn.Linear(self.inDimTL,
-                                                      self.output_dim))  # (if there is only one task specific layer, the in dimension of this layer is equal to the out dim of the shared layers
-                    else:
-                        taskLs.append(torch.nn.Linear(self.dimTaskL, self.output_dim))
+                    taskLs.append(torch.nn.Linear(self.inDimTL, self.output_dim))  # (if there is only one task specific layer, the in dimension of this layer is equal to the out dim of the shared layers
                 else:
                     taskLs.append(torch.nn.Linear(self.inDimTL, self.dimTaskL))
                     taskLs.append(torch.nn.ReLU())
@@ -71,19 +70,23 @@ class MTNet(Backbone):
         if task == -1:
             for i in range(0, self.nTask):
                 ypred_t = ypred_s  # input task layers is equal to output shared layers
-                if self.nTask != 0:
+                if self.nTaskL != 0:
                     for j in range(0, self.nTaskL):
-                        ypred_t = self.TaskLayers[i][j](ypred_t)
-                        if j == self.nTaskL - 1:
-                            ypred_t = self.TaskLayers[i][j + 1](ypred_t)
+                        if j != self.nTaskL - 1:
+                            ypred_t = self.TaskLayers[task][2 * j](ypred_t)
+                            ypred_t = self.TaskLayers[task][2*j + 1](ypred_t)
+                        else:
+                            ypred_t = self.TaskLayers[task][2 * j](ypred_t)
                 ypred["task" + str(i)] = torch.squeeze(ypred_t)
         else:  # only the predictions for one task are requiered
             ypred_t = ypred_s
             if self.nTaskL != 0:
                 for j in range(0, self.nTaskL):
-                    ypred_t = self.TaskLayers[task][j](ypred_t)
-                    if j != self.nTask:
-                        ypred_t=self.TaskLayers[task][j+1](ypred_t)
+                    if j != self.nTaskL-1:
+                        ypred_t=self.TaskLayers[task][2*j](ypred_t)
+                        ypred_t=self.TasKLayers[task][2j+1](ypred_t)
+                    else:
+                        ypred_t=self.TaskLayers[task][2*j](ypred_t)
             ypred["task" + str(task)] = torch.squeeze(ypred_t)
 
         return ypred
@@ -91,6 +94,8 @@ class MTNet(Backbone):
 num_out_channels = {'segmentation': 13, 'depth': 1, 'normal': 3}
 
 class MTAN(Backbone):
+
+
     def __init__(self, nTasks=3, encoder=encoder_class(), decoders=nn.ModuleDict({task: DeepLabHead(2048, num_out_channels[task]) for task in ['segmentation', 'depth', 'normal']})): #default will be as in LIBMTL: encoder dilated resnet 50, decoders ASPP . 3 tasks, ordened as segmentation=0, depth=1, normal=3
         Backbone.__init__(self, 284 * 384, 50, 100, nTasks, 10, 100)
         self.ntasks = nTasks
@@ -99,6 +104,7 @@ class MTAN(Backbone):
 
 
     def forward(self, batch, task=-1):
+
         ypred = dict()
         # input through shared dilated resnet-50 encoder
 
@@ -312,8 +318,84 @@ class MultiLeNet(Backbone):
 
 
 
+class Seq2SeqMTL(Backbone):
 
+    def __init__(self, seq_length=384, feature_num=2, hidden_node_dim=64, hidden_vec_size=128, shared_layers=4, task_layers=4, ntask=2):
 
+        self.feature_num=feature_num
+        Backbone.__init__(self, seq_length, shared_layers, hidden_node_dim, ntask, task_layers, hidden_node_dim)
+
+        # define everything for the shared encoder
+        self.shared_encoder = torch.nn.ModuleList()
+        self.shared_encoder.append(
+            torch.nn.LSTM(input_size=self.feature_num, hidden_size=hidden_node_dim, num_layers=self.nSharedL,
+                          batch_first=True,
+                          bidirectional=True))  # batch first makes sure the input and output tensors are provided as tensors of size (batch, seq,features)
+        # this is then transformed through the squeezer and expander
+
+        # define everything for task-specific decoder
+        self.task_decoder = torch.nn.ModuleList()
+        for i in range(0,self.feature_num):  # to make it even more flexible, variate number of linear layers as well, just watch out for the output dim
+            self.task = torch.nn.ModuleList()
+            self.task.append(torch.nn.LSTM(input_size=hidden_vec_size, hidden_size=hidden_node_dim,
+                                           num_layers=self.nTaskL, batch_first=True,
+                                           bidirectional=True))  # batch first ''
+            self.task.append(torch.nn.Linear(hidden_vec_size, hidden_node_dim * 2))
+            self.task.append(torch.nn.ReLU())
+            self.task.append(torch.nn.Linear(hidden_node_dim * 2,
+                                             int(hidden_node_dim * 1 / 2)))  # self.task_decoder.append(torch.nn.Linear(            #https://discuss.pytorch.org/t/any-pytorch-function-can-work-as-keras-timedistributed/1346/4 => miguel comments that three dim tensors can now be feeded which removes the need of a timedistributed layer. if bug, check if it helps to use his implementation
+            self.task.append(torch.nn.ReLU())
+            self.task.append(torch.nn.Linear(int(hidden_node_dim * 1 / 2), 1))
+            self.task.append(torch.nn.ReLU())  # output is (bs, seq/length/2 (=hiddenvecsize), 1)
+            self.task_decoder.append(self.task)
+
+        # This will make sure that we do not spend time on computing the padded timesteps (the zeros). First we have to pack the padded tensors and then we can feed them to LSTM
+
+    def PackTensors(self, padded_tensors, pad_value=0):
+        packed_tensors = []
+        sequence_lengths = torch.count_nonzero(padded_tensors[:, :, 0],
+                                               dim=1)  # the lenghts are the same for both sequences so you do not have to obtain a tuple here
+        sorted_lengths, sorted_idx = sequence_lengths.sort(descending=True)
+        sorted_input = padded_tensors[sorted_idx, :,
+                       :]  # original shape but now with ordered samples based on sequence length
+        self.packed_tensors = torch.nn.utils.rnn.pack_padded_sequence(sorted_input, sorted_lengths, batch_first=True)
+
+        return self.packed_tensors
+
+    def forward(self, x, task=-1, val=False, test=False, pack_tensors=False):
+
+        x=x.to(torch.float32)
+
+        ypred = dict()
+
+        if val == True:
+            self.sequence_length_out = 82
+        elif test == True:
+            self.sequence_length_out = 85
+        else:
+            self.sequence_length_out = 86
+
+        if pack_tensors == True:
+            input_packed = self.PackTensors(x)  # pack the tensors to make sure the zeros are ignored
+        else:  # figure out if this is very very bad to not pack the tensors while they are padded.
+            input_packed = x
+        # print("hier")
+        y_encoded, (h_1, c_1) = self.shared_encoder[0](input_packed)  # output encoder
+        # print("ofhier")
+        y_encoded = y_encoded[:,-1]  # transform sequence to point #torch.SIZE([BS,128]) dit is output na layer 4= seq to point
+        # print("ofaar")
+        y_encoded = y_encoded.unsqueeze(1).expand(-1, self.sequence_length_out, -1)  # transform point to vector #torch.SIZE([BS, hiddenvec size, hiddenvecsize] input decoder = vector
+
+        for i in range(0, self.feature_num):
+            for j in range(0, len(self.task)):
+                if j != 0:
+                    y_dec = self.task_decoder[i][j](y_dec)  # final output is BS, 128, 1
+                else:
+                    y_dec, (h_t, c_t) = self.task_decoder[i][j](
+                        y_encoded)  # for each task, the input of the decoder is equal to the output of the encoder
+            ypred["task" + str(i)] = y_dec
+
+        return ypred
 
 
 
