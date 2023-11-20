@@ -20,36 +20,41 @@ class Dataset():
 
 class ToyRegDataset(Dataset):
     def __init__(self, number_of_datapoints: object, sigmaTask: object, NTask: object = 2, number_of_features: object = 10, basefunction: object = np.tanh,
-                 random_state: object = 99) -> object:  # init the dataset parameters
-
+            random_state: object = 99) -> object:  # init the dataset parameters
         # general
         Dataset.__init__(self, number_of_features, NTask)
         # distribution wise
         self.size = number_of_datapoints
-        self.B = np.random.normal(scale=np.sqrt(1), size=(self.NTask, self.NFeat)).astype(np.float32)
-        self.epsilon = np.random.normal(scale=np.sqrt(3.5), size=(self.NTask, 1, self.NFeat)).astype(
-            np.float32)
+        self.B = np.random.normal(scale=np.sqrt(1), size=(1, self.NFeat)).astype(np.float32)
+        self.epsilon = np.random.normal(scale=np.sqrt(3.5), size=(self.NTask, 1, self.NFeat)).astype(np.float32)
         self.sigmaTask = np.array(sigmaTask).astype(np.float32)
 
     def generate(self):  # function to call to effectively create tensor dataset with the characteristics defined init
-        labels = []
-        features = np.random.normal(scale=np.sqrt(1), size=(self.size, self.NFeat)).astype(np.float32)
-        for task in range(0, self.NTask):
-            labels.append(self.sigmaTask[task] * np.tanh((self.B[task] + self.epsilon[task]).dot(np.transpose(features))))
+        labels = [[], []]
+        features=[]
+        for i in range(0, self.size):
+            features.append(np.random.normal(scale=np.sqrt(1), size=(self.NFeat)).astype(np.float32))
+            for task in range(0, self.NTask):
+                labels[task].append(self.sigmaTask[task] * np.tanh((self.B + self.epsilon[task]).dot(features[i])))
 
-        return torch.from_numpy(features), torch.from_numpy(np.array(labels)).squeeze()
+        labels=np.absolute(np.stack(labels))
+        return torch.from_numpy(np.array(features)), torch.from_numpy(labels.swapaxes(0,1))
 
     def train_test_split(self, x, y, test_size=0.2):
-        y_train=[]
-        y_val=[]
-        y_test=[]
+        print(x.shape)
+        print(y.shape)
+        y_train=[[], []]
+        y_val=[[], []]
+        y_test=[[],[]]
         for task in range(0, self.NTask):
-            X_train, X_temp, y_train_task, y_temp_0 = train_test_split(x, y[task], test_size=test_size*2,random_state=33)  # configProj['parameters']["random_seed"]
-            y_train.append(y_train_task)
-            X_val, X_test, y_val_task, y_test_task = train_test_split(X_temp, y_temp_0, test_size=0.5,random_state=33)  # configProj['parameters']["random_seed"]
-            y_val.append(y_val_task)
-            y_test.append(y_test_task)
+            X_train, X_temp, y_train_task, y_temp_0 = train_test_split(x, y[:,task], test_size=test_size*2,random_state=33)
 
+            # configProj['parameters']["random_seed"]
+            y_train[task].append(y_train_task)
+            print(len(y_train_task))
+            X_val, X_test, y_val_task, y_test_task = train_test_split(X_temp, y_temp_0, test_size=0.5,random_state=33)  # configProj['parameters']["random_seed"]
+            y_val[task].append(y_val_task)
+            y_test[task].append(y_test_task)
         return X_train, y_train, X_val, y_val, X_test, y_test
 
     def add_noise(self, NTask, Nobs, Percentage, y_clean, onlymain=False, type="Random"): #add noise to output., percentage= how many noise wrt to total length? only main task noisy or all tasks? #choose type of noise
@@ -60,10 +65,9 @@ class ToyRegDataset(Dataset):
 
         yt=y_clean
         indnoisy=np.zeros(Nobs);
-
         for i in range(NTask):
-                shap = len(yt[i])
-                print(shap)
+                shap = yt[:,i,:].shape
+
                 idList = np.random.choice(Nobs, nsamp,
                                           replace=False)  # choose random indices to which you want to add noise and safe them => needed to plot the weight histograms
                 indnoisy[idList] = 1;  # set all indices to which we add noise to 1
@@ -72,8 +76,8 @@ class ToyRegDataset(Dataset):
                     ny=np.random.normal(0, .2, size=(len(idList), shap[1]))  #generate gaussian noise
                 else:
                     maxVal = 0.5
-                    ny = -maxVal * np.ones(shape=(len(idList)), dtype=np.float32) # add random points
-                yt[i][ idList] = torch.tensor(ny)  # add noise to original signal
+                    ny = -maxVal * np.ones(shape=(len(idList), shap[1]), dtype=np.float32) # add random points
+                yt[idList,i, :] = torch.tensor(ny)  # add noise to original signal
                 if onlymain == True:
                     break  # loops stops
 
