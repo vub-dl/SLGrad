@@ -44,7 +44,7 @@ class MTNet(Backbone):
             else:
                 self.output_dim = self.output_dim_2
             for j in range(0, self.nTaskL):
-                if j == self.nTaskL - 1 or self.nTaskL == 0:  # the last layer should output the output dim
+                if j == self.nTaskL - 1:  # the last layer should output the output dim
                     taskLs.append(torch.nn.Linear(self.inDimTL, self.output_dim))  # (if there is only one task specific layer, the in dimension of this layer is equal to the out dim of the shared layers
                 else:
                     taskLs.append(torch.nn.Linear(self.inDimTL, self.dimTaskL))
@@ -69,24 +69,21 @@ class MTNet(Backbone):
 
         if task == -1:
             for i in range(0, self.nTask):
+                self.rep=ypred_s
                 ypred_t = ypred_s  # input task layers is equal to output shared layers
-                if self.nTaskL != 0:
-                    for j in range(0, self.nTaskL):
-                        if j != self.nTaskL - 1:
-                            ypred_t = self.TaskLayers[task][2 * j](ypred_t)
+                #if self.nTaskL != 0:
+                for j in range(0, self.nTaskL):
+                    ypred_t = self.TaskLayers[i][2 * j](ypred_t)
+                    if j != self.nTaskL - 1:
                             ypred_t = self.TaskLayers[task][2*j + 1](ypred_t)
-                        else:
-                            ypred_t = self.TaskLayers[task][2 * j](ypred_t)
                 ypred["task" + str(i)] = torch.squeeze(ypred_t)
         else:  # only the predictions for one task are requiered
             ypred_t = ypred_s
             if self.nTaskL != 0:
                 for j in range(0, self.nTaskL):
+                    ypred_t = self.TaskLayers[task][2 * j](ypred_t)
                     if j != self.nTaskL-1:
-                        ypred_t=self.TaskLayers[task][2*j](ypred_t)
-                        ypred_t=self.TasKLayers[task][2j+1](ypred_t)
-                    else:
-                        ypred_t=self.TaskLayers[task][2*j](ypred_t)
+                        ypred_t=self.TaskLayers[task][2*j+1](ypred_t)
             ypred["task" + str(task)] = torch.squeeze(ypred_t)
 
         return ypred
